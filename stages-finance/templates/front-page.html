@@ -1,0 +1,29 @@
+<!-- wp:template-part {"slug":"header","tagName":"div"} /-->
+<!-- wp:group {"tagName":"main","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
+<main class="wp-block-group">
+<!-- wp:pattern {"slug":"stages-finance/hero"} /-->
+<!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
+<section class="wp-block-group" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:group {"align":"wide","className":"section-head","layout":{"type":"flex","orientation":"vertical"},"style":{"spacing":{"blockGap":"6px"}}} -->
+<div class="wp-block-group alignwide section-head"><!-- wp:paragraph {"className":"eyebrow"} --><p class="eyebrow">Fresh from the blog</p><!-- /wp:paragraph -->
+<!-- wp:heading --><h2 class="wp-block-heading">Latest articles</h2><!-- /wp:heading --></div>
+<!-- /wp:group -->
+<!-- wp:query {"queryId":11,"query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","inherit":false},"align":"wide"} -->
+<div class="wp-block-query alignwide">
+<!-- wp:post-template {"className":"post-grid","style":{"spacing":{"blockGap":"24px"}},"layout":{"type":"grid","columnCount":3}} -->
+<!-- wp:post-terms {"term":"stage","className":"stage-badge"} /-->
+<!-- wp:post-title {"level":3,"isLink":true} /-->
+<!-- wp:post-excerpt {"excerptLength":22} /-->
+<!-- wp:post-date /-->
+<!-- /wp:post-template -->
+</div>
+<!-- /wp:query -->
+</section>
+<!-- /wp:group -->
+<!-- wp:pattern {"slug":"stages-finance/value-way"} /-->
+<!-- wp:pattern {"slug":"stages-finance/tools-strip"} /-->
+<!-- wp:pattern {"slug":"stages-finance/newsletter"} /-->
+<!-- wp:pattern {"slug":"stages-finance/about-snippet"} /-->
+</main>
+<!-- /wp:group -->
+<!-- wp:template-part {"slug":"footer","tagName":"div"} /-->

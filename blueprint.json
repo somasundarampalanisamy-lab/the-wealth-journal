@@ -1,0 +1,45 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"meta": {
+		"title": "The Wealth Journal demo",
+		"description": "A three-stage personal finance blog: Starting Out, Growing, Building Wealth.",
+		"author": "somasundarampalanisamy-lab"
+	},
+	"landingPage": "/",
+	"preferredVersions": { "php": "8.3", "wp": "latest" },
+	"features": { "networking": true },
+	"login": true,
+	"siteOptions": {
+		"blogname": "The Wealth Journal",
+		"blogdescription": "Money advice that grows up with you",
+		"permalink_structure": "/%postname%/"
+	},
+	"steps": [
+		{
+			"step": "installTheme",
+			"themeData": {
+				"resource": "git:directory",
+				"url": "https://github.com/somasundarampalanisamy-lab/the-wealth-journal",
+				"ref": "main",
+				"refType": "branch",
+				"path": "stages-finance"
+			},
+			"options": { "activate": true }
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "git:directory",
+				"url": "https://github.com/somasundarampalanisamy-lab/the-wealth-journal",
+				"ref": "main",
+				"refType": "branch",
+				"path": "life-stages"
+			},
+			"options": { "activate": true }
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require_once '/wordpress/wp-load.php'; wp_update_user( array( 'ID' => 1, 'display_name' => 'Your Name' ) ); foreach ( array( 'hello-world' ) as $s ) { $p = get_page_by_path( $s, OBJECT, 'post' ); if ( $p ) { wp_delete_post( $p->ID, true ); } } ls_import_demo_content();"
+		}
+	]
+}
