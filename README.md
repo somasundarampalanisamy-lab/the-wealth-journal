@@ -2,13 +2,15 @@
 
 The WordPress theme (Stages Finance) and companion plugin (Life Stages) behind The Wealth Journal, a personal finance and value investing blog organised by life stage:
 
-| Stage | Audience | Status |
-|---|---|---|
-| **Starting Out** | From campus to first payslip | Live |
-| **Growing** | Settled in, levelling up | Live |
-| **Building Wealth** | Established and compounding | Switched off (planned premium tier) |
+| Stage | Audience | Core ideas | Status |
+|---|---|---|---|
+| **Starting Out** | From campus to first payslip | The maths of compounding, India's long-term growth, investing on autopilot | Live |
+| **Growing** | Settled in, levelling up | Asset allocation, avoiding FOMO, holding through dips | Live |
+| **Building Wealth** | Established and compounding | Concentrated quality, moats, deep research process | Coming soon (waitlist, planned premium tier) |
 
-Building Wealth is switched off, not deleted. Turn it back on any time in **Settings → Life Stages**.
+The About page credits the investors and teachers whose public work shaped each stage.
+
+Each stage can be **Live**, **Coming soon** or **Off** in **Settings → Life Stages**. Building Wealth is set to Coming soon: its card and menu link stay visible with a "Coming soon" label, its page collects waitlist sign-ups, and its articles stay hidden until you switch it to Live.
 
 ## Live demo
 

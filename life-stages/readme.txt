@@ -5,7 +5,8 @@ Stable tag: 1.1.0
 License: GPL-2.0-or-later
 
 Audience "stages" for a personal finance blog: Starting Out, Growing, Building Wealth.
-Each stage can be switched on or off in Settings → Life Stages (Building Wealth is off by default).
+Each stage can be Live, Coming soon (visible, with a waitlist page; articles hidden) or Off in
+Settings → Life Stages. Building Wealth is Coming soon by default.
 
 == What it adds ==
 * Posts → Stages: tick one or more stages on each post (separate from topic categories).

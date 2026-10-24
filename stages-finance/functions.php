@@ -71,6 +71,16 @@ function stages_finance_stage_on( $slug ) {
 }
 
 /**
+ * A life stage's state: 'on', 'soon' (coming soon) or 'off'. Always 'on' without the plugin.
+ *
+ * @param string $slug Stage slug.
+ * @return string
+ */
+function stages_finance_stage_state( $slug ) {
+	return function_exists( 'ls_stage_state' ) ? ls_stage_state( $slug ) : 'on';
+}
+
+/**
  * Pattern category for this theme's sections.
  */
 function stages_finance_pattern_category() {
@@ -113,7 +123,7 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 			'icon'  => 'cap',
 			'label' => 'Starting Out',
 			'title' => 'Your first salary, sorted.',
-			'text'  => 'Decode your payslip, beat the tax confusion and start investing the right way from day one.',
+			'text'  => 'Get the maths of money right, back India’s long-term growth, and put your investing on autopilot from your first payslip.',
 			'who'   => 'From campus to first payslip',
 			'slug'  => 'starting-out',
 			'cta'   => 'Start my first-job plan',
@@ -124,7 +134,7 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 			'icon'  => 'trend',
 			'label' => 'Growing',
 			'title' => 'Earning well. Now make it work.',
-			'text'  => 'Turn a growing salary into growing wealth, with smarter SIPs, your first stock analysis and no lifestyle creep.',
+			'text'  => 'Set your asset allocation, tune out the FOMO, and learn to stay invested when markets fall.',
 			'who'   => 'Settled in, levelling up',
 			'slug'  => 'growing',
 			'cta'   => 'Grow my money',
@@ -135,7 +145,7 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 			'icon'  => 'pillars',
 			'label' => 'Building Wealth',
 			'title' => 'Protect what you’ve built. Compound the rest.',
-			'text'  => 'Asset allocation, rebalancing and value investing for a portfolio that survives every market cycle.',
+			'text'  => 'Own a few high-quality businesses with lasting moats, backed by a deep, repeatable research process.',
 			'who'   => 'Established and compounding',
 			'slug'  => 'building-wealth',
 			'cta'   => 'Build my portfolio',
@@ -143,19 +153,26 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 		),
 	);
 
-	// With the Life Stages plugin: show only switched-on stages and use its audience titles.
-	if ( function_exists( 'ls_stage_enabled' ) ) {
-		$all   = ls_all_stages();
-		$cards = array_values(
-			array_filter(
-				$cards,
-				function ( $c ) {
-					return ls_stage_enabled( $c['slug'] );
-				}
-			)
-		);
-		foreach ( $cards as $i => $c ) {
+	// With the Life Stages plugin: hide stages that are off, mark "coming soon" ones,
+	// and use the plugin's audience titles.
+	$cards = array_values(
+		array_filter(
+			$cards,
+			function ( $c ) {
+				return 'off' !== stages_finance_stage_state( $c['slug'] );
+			}
+		)
+	);
+	foreach ( $cards as $i => $c ) {
+		if ( function_exists( 'ls_all_stages' ) ) {
+			$all                = ls_all_stages();
 			$cards[ $i ]['who'] = esc_html( $all[ $c['slug'] ]['who'] );
+		}
+		$cards[ $i ]['soon'] = 'soon' === stages_finance_stage_state( $c['slug'] );
+		if ( $cards[ $i ]['soon'] ) {
+			$cards[ $i ]['cta']    = 'Join the waitlist';
+			$cards[ $i ]['url']    = $c['url'] . '#waitlist';
+			$cards[ $i ]['class'] .= ' is-soon';
 		}
 	}
 
@@ -164,7 +181,8 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 	foreach ( $cards as $c ) {
 		$out .= '<!-- wp:column --><div class="wp-block-column">';
 		$out .= '<!-- wp:group {"className":"stage-card ' . $c['class'] . '","style":{"spacing":{"blockGap":"14px"}},"layout":{"type":"flex","orientation":"vertical","verticalAlignment":"top"}} --><div class="wp-block-group stage-card ' . $c['class'] . '">';
-		$out .= '<!-- wp:paragraph {"className":"eyebrow card-eyebrow"} --><p class="eyebrow card-eyebrow">' . $c['label'] . '</p><!-- /wp:paragraph -->';
+		$badge = ! empty( $c['soon'] ) ? ' <span class="soon-badge">Coming soon</span>' : '';
+		$out  .= '<!-- wp:paragraph {"className":"eyebrow card-eyebrow"} --><p class="eyebrow card-eyebrow">' . $c['label'] . $badge . '</p><!-- /wp:paragraph -->';
 		$out .= '<!-- wp:heading {"level":' . $level . '} --><h' . $level . ' class="wp-block-heading">' . $c['title'] . '</h' . $level . '><!-- /wp:heading -->';
 		$out .= '<!-- wp:paragraph {"className":"card-text"} --><p class="card-text">' . $c['text'] . '</p><!-- /wp:paragraph -->';
 		$out .= '<!-- wp:paragraph {"className":"card-who"} --><p class="card-who">' . $c['who'] . '</p><!-- /wp:paragraph -->';

@@ -400,3 +400,27 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 	.article-comments .comment-form-author { grid-column: 1; }
 	.article-comments .comment-form-email { grid-column: 2; }
 }
+
+/* ---------- Hub audience + ideas lines ---------- */
+.hub-hero .stage-who { margin: 10px 0 0; }
+.hub-hero .stage-ideas { margin-top: 4px !important; }
+.entry-content [id] { scroll-margin-top: 96px; }
+.hub-hero .stage-ideas { margin: 0; font-size: 0.9375rem; color: var(--wp--preset--color--ink-soft); }
+.hub-hero .stage-ideas a { color: var(--stage); font-weight: 600; white-space: nowrap; }
+
+
+/* ---------- "Coming soon" stage ---------- */
+.soon-badge {
+	display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 999px;
+	font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5;
+	background: var(--wp--preset--color--ink); color: #fff; vertical-align: middle;
+}
+.stage-card.is-soon { background: var(--wp--preset--color--surface); box-shadow: none; border-top-style: dashed; }
+.stage-card.is-soon .card-eyebrow .soon-badge { background: var(--stage); }
+.stage-card.is-soon .wp-block-button__link { background: transparent; color: var(--stage); box-shadow: inset 0 0 0 2px var(--stage); }
+.stage-card.is-soon .wp-block-button__link:hover { background: var(--stage); color: #fff; }
+.wp-block-navigation .soon-badge { font-size: 0.625rem; padding: 1px 6px; margin-left: 4px; background: var(--wp--preset--color--building); }
+.site-footer .soon-badge { background: #24344D; color: #C9D2E0; }
+.hub-hero .eyebrow .soon-badge { background: var(--stage); }
+.soon-covers li { margin-bottom: 6px; }
+#waitlist { scroll-margin-top: 90px; }

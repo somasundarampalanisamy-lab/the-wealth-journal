@@ -27,6 +27,7 @@ define( 'LS_URL', plugin_dir_url( __FILE__ ) );
  * - hub:   slug of the stage's hub page.
  * - who:   the audience title shown on cards ("who is this for").
  * - about: a longer description of the audience.
+ * - ideas: the core ideas the stage teaches.
  *
  * @return array
  */
@@ -35,53 +36,132 @@ function ls_all_stages() {
 		'starting-out'    => array(
 			'label' => 'Starting Out',
 			'hub'   => 'starting-out',
+			'title' => 'Your first salary, sorted.',
 			'who'   => 'From campus to first payslip',
 			'about' => 'Final-year students and anyone in their first year of work.',
+			'ideas' => 'The maths of compounding, India’s long-term growth story, and investing on autopilot.',
 		),
 		'growing'         => array(
 			'label' => 'Growing',
 			'hub'   => 'growing',
+			'title' => 'Earning well. Now make it work.',
 			'who'   => 'Settled in, levelling up',
 			'about' => 'One to five years into your career, with savings that are starting to grow.',
+			'ideas' => 'Asset allocation, tuning out FOMO, and staying invested when markets fall.',
 		),
 		'building-wealth' => array(
 			'label' => 'Building Wealth',
 			'hub'   => 'building-wealth',
+			'title' => 'Protect what you’ve built. Compound the rest.',
 			'who'   => 'Established and compounding',
 			'about' => 'Five or more years in, with a portfolio worth protecting.',
+			'ideas' => 'A few high-quality businesses, lasting moats, and a deep, repeatable research process.',
+			'covers' => array(
+				'How to judge business quality: return on capital, moats and management',
+				'Why a concentrated portfolio of a few great businesses can beat owning everything',
+				'Margin of safety and circle of competence, applied to real decisions',
+				'A research process you can repeat for decades, and the mistakes to avoid',
+			),
 		),
 	);
 }
 
 /**
- * Slugs of the stages that are switched on (Settings → Life Stages).
- * Building Wealth is off by default; it is kept for a future premium tier.
+ * Each stage's state: 'on' (live), 'soon' (shown as "Coming soon" with a waitlist) or 'off' (hidden).
+ * Set in Settings → Life Stages. Building Wealth defaults to 'soon' (planned premium tier).
+ *
+ * @return array slug => state
+ */
+function ls_stage_states() {
+	$defaults = array(
+		'starting-out'    => 'on',
+		'growing'         => 'on',
+		'building-wealth' => 'soon',
+	);
+	$opts   = get_option( 'ls_settings', array() );
+	$states = $defaults;
+	if ( isset( $opts['stage_states'] ) && is_array( $opts['stage_states'] ) ) {
+		foreach ( $opts['stage_states'] as $slug => $state ) {
+			if ( isset( $states[ $slug ] ) && in_array( $state, array( 'on', 'soon', 'off' ), true ) ) {
+				$states[ $slug ] = $state;
+			}
+		}
+	} elseif ( isset( $opts['stages'] ) && is_array( $opts['stages'] ) ) {
+		// Older setting format: a list of switched-on stages.
+		foreach ( $states as $slug => $state ) {
+			$states[ $slug ] = in_array( $slug, $opts['stages'], true ) ? 'on' : 'off';
+		}
+	}
+	return $states;
+}
+
+/**
+ * State of one stage.
+ *
+ * @param string $slug Stage slug.
+ * @return string 'on' | 'soon' | 'off'
+ */
+function ls_stage_state( $slug ) {
+	$states = ls_stage_states();
+	return isset( $states[ $slug ] ) ? $states[ $slug ] : 'off';
+}
+
+/**
+ * Slugs of live stages.
  *
  * @return string[]
  */
 function ls_enabled_stage_slugs() {
-	$opts = get_option( 'ls_settings', array() );
-	$on   = isset( $opts['stages'] ) && is_array( $opts['stages'] ) ? $opts['stages'] : array( 'starting-out', 'growing' );
-	return array_values( array_intersect( array_keys( ls_all_stages() ), $on ) );
+	return array_keys( array_filter( ls_stage_states(), function ( $s ) { return 'on' === $s; } ) );
 }
 
 /**
- * Whether a stage is switched on.
+ * Whether a stage is live.
  *
  * @param string $slug Stage slug.
  * @return bool
  */
 function ls_stage_enabled( $slug ) {
-	return in_array( $slug, ls_enabled_stage_slugs(), true );
+	return 'on' === ls_stage_state( $slug );
 }
 
 /**
- * Stages that are switched off.
+ * Whether a stage is shown as "Coming soon".
+ *
+ * @param string $slug Stage slug.
+ * @return bool
+ */
+function ls_stage_soon( $slug ) {
+	return 'soon' === ls_stage_state( $slug );
+}
+
+/**
+ * Stages that are not live (coming soon or off): their articles are hidden.
  *
  * @return string[]
  */
 function ls_disabled_stage_slugs() {
 	return array_values( array_diff( array_keys( ls_all_stages() ), ls_enabled_stage_slugs() ) );
+}
+
+/**
+ * The first "coming soon" stage after a given stage, if any.
+ *
+ * @param string $slug Stage slug.
+ * @return string Empty if none.
+ */
+function ls_next_soon_stage( $slug ) {
+	$keys = array_keys( ls_all_stages() );
+	$pos  = array_search( $slug, $keys, true );
+	if ( false === $pos ) {
+		return '';
+	}
+	foreach ( array_slice( $keys, $pos + 1 ) as $k ) {
+		if ( ls_stage_soon( $k ) ) {
+			return $k;
+		}
+	}
+	return '';
 }
 
 /**
@@ -332,6 +412,12 @@ function ls_next_step( $content ) {
 		$title = sprintf( 'Ready for more? Move up to %s →', $stages[ $next_stage ]['label'] );
 		$url   = ls_page_url( $stages[ $next_stage ]['hub'] );
 		$hint  = sprintf( 'You’ve finished the %s path.', $label );
+	} elseif ( ls_next_soon_stage( $stage ) ) {
+		$soon  = ls_next_soon_stage( $stage );
+		$all   = ls_all_stages();
+		$title = sprintf( '%s is coming soon. Join the waitlist →', $all[ $soon ]['label'] );
+		$url   = ls_page_url( $all[ $soon ]['hub'] ) . '#waitlist';
+		$hint  = sprintf( 'You’ve finished the %s path.', $label );
 	} else {
 		$title = sprintf( 'Browse every %s article →', $label );
 		$url   = ls_page_url( $stage );
@@ -397,8 +483,14 @@ function ls_signup_shortcode( $atts ) {
 	);
 
 	$stage  = sanitize_key( $atts['stage'] );
-	if ( ! ls_stage_enabled( $stage ) ) {
+	if ( 'off' === ls_stage_state( $stage ) ) {
 		return '';
+	}
+	if ( ls_stage_soon( $stage ) ) {
+		$all            = ls_all_stages();
+		$atts['title']  = $all[ $stage ]['label'] . ' is coming soon';
+		$atts['text']   = 'Join the waitlist and be the first to know when it opens. One email when it launches, nothing else.';
+		$atts['button'] = 'Join the waitlist';
 	}
 	$opts   = get_option( 'ls_settings', array() );
 	$action = isset( $opts[ 'form_' . str_replace( '-', '_', $stage ) ] ) ? $opts[ 'form_' . str_replace( '-', '_', $stage ) ] : '';
@@ -416,7 +508,8 @@ function ls_signup_shortcode( $atts ) {
 	$out .= '<input type="hidden" name="fields[stage]" value="' . esc_attr( $stage ) . '">';
 	$out .= '<button type="submit">' . esc_html( $atts['button'] ) . '</button>';
 	$out .= '</form>';
-	$out .= '<p class="ls-signup-note">Unsubscribe any time. Moved to a new stage of life? You can update it from any email.</p>';
+	$note = ls_stage_soon( $stage ) ? 'No spam. You can unsubscribe any time.' : 'Unsubscribe any time. Moved to a new stage of life? You can update it from any email.';
+	$out .= '<p class="ls-signup-note">' . esc_html( $note ) . '</p>';
 	$out .= '</div>';
 	return $out;
 }
@@ -467,9 +560,13 @@ function ls_sanitize_settings( $in ) {
 		$out[ $k ] = isset( $in[ $k ] ) ? esc_url_raw( $in[ $k ] ) : '';
 	}
 	$out['email_field'] = isset( $in['email_field'] ) ? sanitize_key( $in['email_field'] ) : 'email_address';
-	$out['stages']      = isset( $in['stages'] ) && is_array( $in['stages'] ) ? array_values( array_intersect( array_keys( ls_all_stages() ), array_map( 'sanitize_key', $in['stages'] ) ) ) : array();
-	if ( empty( $out['stages'] ) ) {
-		$out['stages'] = array( 'starting-out' ); // At least one stage must stay on.
+	$out['stage_states'] = array();
+	foreach ( array_keys( ls_all_stages() ) as $slug ) {
+		$v                            = isset( $in['stage_states'][ $slug ] ) ? sanitize_key( $in['stage_states'][ $slug ] ) : 'off';
+		$out['stage_states'][ $slug ] = in_array( $v, array( 'on', 'soon', 'off' ), true ) ? $v : 'off';
+	}
+	if ( ! in_array( 'on', $out['stage_states'], true ) ) {
+		$out['stage_states']['starting-out'] = 'on'; // At least one stage must stay live.
 	}
 	return $out;
 }
@@ -489,8 +586,8 @@ function ls_settings_page() {
 	$o      = wp_parse_args( get_option( 'ls_settings', array() ), array( 'form_starting_out' => '', 'form_growing' => '', 'form_building_wealth' => '', 'email_field' => 'email_address' ) );
 	$fields = array(
 		'form_starting_out'    => 'Starting Out form URL (e.g. First Job Budget Checklist)',
-		'form_growing'         => 'Growing form URL (e.g. SIP Step-Up Planner)',
-		'form_building_wealth' => 'Building Wealth form URL (e.g. 60/40 Rebalancing Worksheet)',
+		'form_growing'         => 'Growing form URL (e.g. 60/40 Rebalancing Worksheet)',
+		'form_building_wealth' => 'Building Wealth form URL (used for the waitlist while it is “Coming soon”)',
 	);
 	?>
 	<div class="wrap">
@@ -500,13 +597,23 @@ function ls_settings_page() {
 			<?php settings_fields( 'ls_settings_group' ); ?>
 			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row">Stages shown on the site</th>
-					<td><fieldset>
-						<?php foreach ( ls_all_stages() as $slug => $st ) : ?>
-						<label style="display:block;margin-bottom:6px"><input type="checkbox" name="ls_settings[stages][]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( ls_stage_enabled( $slug ) ); ?>> <strong><?php echo esc_html( $st['label'] ); ?></strong> · <?php echo esc_html( $st['who'] ); ?></label>
-						<?php endforeach; ?>
-						<p class="description">A stage that is switched off disappears everywhere: homepage card, menu, footer, its hub page, its articles and its sign-up form. Nothing is deleted, so you can switch it back on at any time (for example, when you launch a premium tier).</p>
-					</fieldset></td>
+					<th scope="row">Stages</th>
+					<td>
+						<table class="widefat striped" style="max-width:640px">
+							<thead><tr><th>Stage</th><th style="text-align:center">Live</th><th style="text-align:center">Coming soon</th><th style="text-align:center">Off</th></tr></thead>
+							<tbody>
+							<?php foreach ( ls_all_stages() as $slug => $st ) : $cur = ls_stage_state( $slug ); ?>
+							<tr>
+								<td><strong><?php echo esc_html( $st['label'] ); ?></strong><br><span class="description"><?php echo esc_html( $st['who'] ); ?></span></td>
+								<?php foreach ( array( 'on', 'soon', 'off' ) as $state ) : ?>
+								<td style="text-align:center"><input type="radio" aria-label="<?php echo esc_attr( $st['label'] . ': ' . $state ); ?>" name="ls_settings[stage_states][<?php echo esc_attr( $slug ); ?>]" value="<?php echo esc_attr( $state ); ?>" <?php checked( $cur, $state ); ?>></td>
+								<?php endforeach; ?>
+							</tr>
+							<?php endforeach; ?>
+							</tbody>
+						</table>
+						<p class="description"><strong>Live:</strong> everything is shown. <strong>Coming soon:</strong> the stage card and menu link stay visible with a “Coming soon” label, its page becomes a waitlist sign-up, and its articles stay hidden. <strong>Off:</strong> the stage disappears completely. Nothing is ever deleted.</p>
+					</td>
 				</tr>
 				<?php foreach ( $fields as $k => $label ) : ?>
 				<tr>

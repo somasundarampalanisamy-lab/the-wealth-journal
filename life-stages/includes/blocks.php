@@ -138,9 +138,10 @@ function ls_pattern( $slug ) {
  * @param int   $count Posts per page.
  * @param int   $qid   Query id.
  * @param bool  $paged Add pagination.
+ * @param string $empty Message when there are no posts.
  * @return string
  */
-function ls_query_grid( $tax, $count = 9, $qid = 31, $paged = false ) {
+function ls_query_grid( $tax, $count = 9, $qid = 31, $paged = false, $empty = '' ) {
 	$attrs = array(
 		'queryId' => $qid,
 		'query'   => array(
@@ -166,5 +167,6 @@ function ls_query_grid( $tax, $count = 9, $qid = 31, $paged = false ) {
 		. '<!-- wp:post-date /-->'
 		. '<!-- /wp:post-template -->'
 		. $pager
+		. ( $empty ? '<!-- wp:query-no-results --><!-- wp:paragraph {"className":"is-muted"} --><p class="is-muted">' . $empty . '</p><!-- /wp:paragraph --><!-- /wp:query-no-results -->' : '' )
 		. "</div>\n<!-- /wp:query -->\n\n";
 }

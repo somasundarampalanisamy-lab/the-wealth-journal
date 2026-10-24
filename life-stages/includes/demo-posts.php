@@ -154,7 +154,7 @@ return array(
 		'title'   => 'Old vs New Tax Regime: Which One Should a Fresher Pick?',
 		'excerpt' => 'HR wants your answer by Friday. Here’s a simple way to decide, without memorising tax slabs.',
 		'cats'    => array( 'tax-regimes-filing' ),
-		'stages'  => array( 'starting-out', 'growing' ),
+		'stages'  => array( 'starting-out' ),
 		'order'   => 5,
 		'days'    => 23,
 		'content' =>
@@ -291,8 +291,8 @@ return array(
 		'title'   => 'Your Day Job Is Your Investing Edge: Circle of Competence',
 		'excerpt' => 'Warren Buffett’s simplest rule: invest in what you understand. For IT professionals, that’s a bigger advantage than you think.',
 		'cats'    => array( 'moats-business-analysis' ),
-		'stages'  => array( 'growing' ),
-		'order'   => 12,
+		'stages'  => array( 'building-wealth' ),
+		'order'   => 21,
 		'days'    => 6,
 		'content' =>
 			ls_p( 'Warren Buffett describes his <strong>circle of competence</strong> as the set of businesses he genuinely understands. The size of the circle matters less than knowing where its edges are, and staying inside them.' )
@@ -315,8 +315,8 @@ return array(
 		'title'   => 'Margin of Safety: Why Engineers Build Bridges for Trucks That Never Come',
 		'excerpt' => 'Benjamin Graham’s most important idea, explained with a bridge: always leave room to be wrong.',
 		'cats'    => array( 'intrinsic-value-margin-of-safety' ),
-		'stages'  => array( 'growing' ),
-		'order'   => 13,
+		'stages'  => array( 'building-wealth' ),
+		'order'   => 22,
 		'days'    => 16,
 		'content' =>
 			ls_p( 'Benjamin Graham, Warren Buffett’s teacher, called <strong>margin of safety</strong> the central idea of investing. It means only buying when the price is comfortably below your estimate of what the business is worth.' )
@@ -335,6 +335,40 @@ return array(
 			. ls_callout( 'Your one action', 'Before your next purchase of any stock, write down what you think it’s worth and why. If the price isn’t clearly below that number, wait.' ),
 	),
 
+	array(
+		'slug'    => 'markets-fall-stay-invested',
+		'title'   => 'Markets Just Fell 20%. Why the Smartest Move Is Usually to Do Nothing',
+		'excerpt' => 'Falls and FOMO are the two moments that wreck most investors. Here’s a simple plan for both, so your asset allocation does the thinking.',
+		'cats'    => array( 'asset-allocation' ),
+		'stages'  => array( 'growing' ),
+		'order'   => 14,
+		'days'    => 8,
+		'content' =>
+			ls_p( 'Your portfolio is red, the news is gloomy and a colleague says he’s “moving everything to FDs until things settle”. A few months later, the same colleague is excited about a small-cap fund that doubled. Fear on the way down and FOMO on the way up are the two moments that do the most damage to ordinary investors.' )
+			. ls_analogy( '<strong>Turbulence on a flight.</strong> It feels alarming, but pilots don’t turn the plane around every time it shakes. They trust the plan they made on the ground. Your asset allocation is that plan.' )
+			. ls_h( 'Falls are normal, not a signal' )
+			. ls_p( 'Indian stock markets have gone through several sharp falls, including 2008 and March 2020. Both felt like the end of the world at the time, and both times the market went on to recover and reach new highs. Nobody can predict the next fall, but you can decide in advance how you will behave in it.' )
+			. ls_h( 'Your plan for a falling market' )
+			. ls_list(
+				array(
+					'<strong>Keep every SIP running.</strong> Falls are when your monthly amount buys the most units.',
+					'<strong>Check your mix, not the headlines.</strong> If equity has dropped well below your target, rebalance from debt into equity.',
+					'<strong>Look at your goals’ dates.</strong> Money you need within three years should already be in debt, so a fall can’t touch it.',
+					'<strong>Open the app less.</strong> Checking daily makes every dip feel personal.',
+				),
+				true
+			)
+			. ls_h( 'Your plan for FOMO' )
+			. ls_list(
+				array(
+					'Before buying something because it “went up a lot”, ask whether it fits your asset allocation and your goals.',
+					'If it’s a new fund or theme, wait 30 days. Most of the urge passes.',
+					'Remember that last year’s top performer is rarely next year’s.',
+				)
+			)
+			. ls_callout( 'Your one action', 'Write your rules down today, while markets are calm: “If markets fall 20%, I will keep my SIPs and rebalance to my target mix.” Stick the note where you’ll see it.' ),
+	),
+
 	/* ---------------- Building Wealth ---------------- */
 
 	array(
@@ -342,8 +376,8 @@ return array(
 		'title'   => 'Rebalancing Is Value Investing on Autopilot',
 		'excerpt' => 'A 60/40 portfolio quietly forces you to buy low and sell high. Here’s how rebalancing works, with real numbers.',
 		'cats'    => array( 'rebalancing' ),
-		'stages'  => array( 'building-wealth' ),
-		'order'   => 21,
+		'stages'  => array( 'growing' ),
+		'order'   => 13,
 		'days'    => 4,
 		'content' =>
 			ls_p( 'Everyone agrees you should buy low and sell high. Almost nobody does it, because when prices are low the news is scary, and when they’re high everyone is excited. <strong>Rebalancing</strong> takes your emotions out of that decision.' )
@@ -375,8 +409,8 @@ return array(
 		'title'   => 'The 40% That Lets You Be Greedy When Others Are Fearful',
 		'excerpt' => 'Debt in a 60/40 portfolio isn’t dead money. It’s your war chest for the days Mr. Market panics.',
 		'cats'    => array( 'asset-allocation' ),
-		'stages'  => array( 'building-wealth' ),
-		'order'   => 22,
+		'stages'  => array( 'growing' ),
+		'order'   => 12,
 		'days'    => 11,
 		'content' =>
 			ls_p( 'Buffett’s famous advice is to be “greedy when others are fearful”. The hard part isn’t the courage. It’s having money available when everything is on sale. That’s the job of the 40% debt side of a 60/40 portfolio.' )

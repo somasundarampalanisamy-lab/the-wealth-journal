@@ -51,7 +51,7 @@ function ls_demo_hub_content( $stage, $term_id ) {
 			'class'   => 'is-stage-starting',
 			'step'    => 'Stage 1 of 3 · Starting Out',
 			'title'   => 'Your first salary, sorted.',
-			'lead'    => 'Everything you need for your first year of work: decoding your payslip, choosing a tax regime, building the save-first habit and making your first investment without rookie mistakes.',
+			'lead'    => 'Get the basics right before the habits set in: understand your payslip, learn the maths of compounding, see why India’s long-term growth matters to you, and automate your first investments so they run without willpower.',
 			'who'     => 'For final-year students and freshers in their first year of work.',
 			'magnet'  => array( 'Get the First Job Budget Checklist', 'A one-page checklist for the week your first salary lands, plus one short money lesson every week.', 'Send me the checklist' ),
 			'next'    => array( 'growing', 'Been working for a year or more? Move up to Growing →' ),
@@ -60,18 +60,18 @@ function ls_demo_hub_content( $stage, $term_id ) {
 			'class'   => 'is-stage-growing',
 			'step'    => 'Stage 2 of 3 · Growing',
 			'title'   => 'Earning well. Now make it work.',
-			'lead'    => 'Your salary is growing. This stage is about making sure your wealth grows faster: stepping up SIPs, beating lifestyle creep and learning to judge a business like a value investor.',
+			'lead'    => 'Your savings are real money now, and your behaviour matters more than your fund picks. This stage is about setting an asset allocation, ignoring the FOMO, and holding your nerve when markets fall.',
 			'who'     => 'For professionals with 1–5 years of work experience.',
-			'magnet'  => array( 'Get the SIP Step-Up Planner', 'A simple sheet that shows how raising your SIP with every increment changes your future, plus a weekly lesson for your stage.', 'Send me the planner' ),
+			'magnet'  => array( 'Get the 60/40 Rebalancing Worksheet', 'A step-by-step worksheet to set your equity and debt mix and check it once a year, plus a weekly lesson for your stage.', 'Send me the worksheet' ),
 			'next'    => array( 'building-wealth', 'Building a serious portfolio? Move up to Building Wealth →' ),
 		),
 		'building-wealth' => array(
 			'class'   => 'is-stage-building',
 			'step'    => 'Stage 3 of 3 · Building Wealth',
 			'title'   => 'Protect what you’ve built. Compound the rest.',
-			'lead'    => 'You have real money invested now. This stage is about keeping it safe and growing: asset allocation, disciplined rebalancing and owning businesses with lasting moats.',
+			'lead'    => 'For investors ready to go beyond funds: owning a few high-quality businesses, understanding what makes a moat last, and building a research process you can repeat for decades.',
 			'who'     => 'For professionals with 5+ years of experience and a growing portfolio.',
-			'magnet'  => array( 'Get the 60/40 Rebalancing Worksheet', 'A step-by-step worksheet for your yearly portfolio check-up, plus a weekly lesson for your stage.', 'Send me the worksheet' ),
+			'magnet'  => array( 'Get the Business Quality Checklist', 'The questions to ask before you buy any business: moat, management, return on capital and price, plus a weekly lesson for your stage.', 'Send me the checklist' ),
 			'next'    => array( 'starting-out', 'Know someone just starting out? Share the Starting Out guide →' ),
 		),
 	);
@@ -162,7 +162,7 @@ function ls_demo_pages( $vi_cat ) {
 		. ls_h( 'How it fits with a 60/40 portfolio' )
 		. ls_p( 'Picking good businesses at fair prices is half the story. The other half is asset allocation: keeping roughly 60% in equity and 40% in debt, and rebalancing when markets move. Together they give you a margin of safety for your whole financial life, not just one stock.' )
 		. '<!-- wp:heading {"align":"wide"} -->' . "\n" . '<h2 class="wp-block-heading alignwide">Value investing articles</h2>' . "\n<!-- /wp:heading -->\n\n"
-		. ls_query_grid( array( 'category' => (array) $vi_cat ), 6, 61 )
+		. ls_query_grid( array( 'category' => (array) $vi_cat ), 6, 61, false, 'In-depth articles on moats, margin of safety and business analysis are coming soon.' )
 		. ls_p( '<em>Everything here is educational. We don’t recommend specific stocks or funds.</em>', 'is-muted' ),
 	);
 
@@ -183,6 +183,30 @@ function ls_demo_pages( $vi_cat ) {
 		. ls_p( 'Trading promises fast money but usually delivers constant screen-checking, stress that leaks into your workday, and losses. SEBI’s own studies have found that roughly nine out of ten individual F&amp;O traders lose money. That isn’t bad luck. You’re competing against algorithms and full-time institutions while also trying to do your actual job. Speculation asks, “What will the price do next week?” Nobody can answer that reliably, least of all someone checking an app between meetings.' )
 		. ls_h( 'The calmer path' )
 		. ls_p( 'Value investing asks a better question: “What is this business worth, and am I paying a fair price for it?” Combined with disciplined asset allocation, it becomes a system that works quietly in the background while you focus on your career and your life. Benjamin Graham laid the foundation, Warren Buffett proved it over decades, and it applies just as well to today’s digital businesses.' )
+		. ls_h( 'Who shaped my thinking', 2, 'influences' )
+		. ls_p( 'The three stages on this blog are built on ideas I learned, over 15 years, from some of India’s most respected investors and teachers. I have never worked with them, and none of them is affiliated with or endorses this blog. I simply recommend their work, and I encourage you to read them directly.' )
+		. ls_h( 'Starting Out: the maths, India’s growth story and investing on autopilot', 3 )
+		. ls_list(
+			array(
+				'<strong>M. Pattabiraman (Pattu)</strong>, IIT Madras professor and founder of <a href="https://freefincal.com/">freefincal</a>. He taught me to run the numbers before trusting any financial product, and that a simple, automated plan beats a clever one.',
+				'<strong>Ridham Desai</strong>, Managing Director at Morgan Stanley India (<a href="https://www.equitymaster.com/timeless-reading/about-ridham-desai">profile</a>). His long-term case for Indian equities is why I believe time in this market is a young investor’s biggest advantage.',
+			)
+		)
+		. ls_h( 'Growing: asset allocation, avoiding FOMO and holding through dips', 3 )
+		. ls_list(
+			array(
+				'<strong>Rajeev Thakkar</strong>, Chief Investment Officer (Equity) at <a href="https://amc.ppfas.com/">PPFAS Mutual Fund</a>. He showed me that discipline, patience and the courage to say no to fads matter as much as which fund you pick.',
+				'<strong>Prashant Jain</strong>, founder and CIO of 3P Investment Managers, and for nearly two decades a fund manager at HDFC Mutual Fund (<a href="https://www.business-standard.com/companies/interviews/centre-s-fiscal-flexibility-sparks-optimism-3p-founder-cio-prashant-jain-124060900336_1.html">interview</a>). He taught me the value of conviction and patience through long stretches when the market disagrees with you.',
+			)
+		)
+		. ls_h( 'Building Wealth: concentrated quality, moats and deep process', 3 )
+		. ls_list(
+			array(
+				'<strong>Vishal Khandelwal</strong>, founder of <a href="https://www.safalniveshak.com/">Safal Niveshak</a>. He taught me that patient value investing is mostly about better decisions, and that process beats prediction.',
+				'<strong>Pulak Prasad</strong>, founder of Nalanda Capital and author of <em>What I Learned About Investing from Darwin</em> (<a href="https://rpc.cfainstitute.org/blogs/enterprising-investor/2023/book-review-what-i-learned-about-investing-from-darwin">book review</a>). He taught me to look for durable businesses that earn high returns on capital, and to hold them for the long run.',
+				'<strong>Sanjay Bakshi</strong>, adjunct professor at MDI Gurgaon and managing partner of ValueQuest Capital (<a href="https://indiaconf.cfainstitute.org/speakers/sanjay-bakshi">profile</a>). His teaching on moats, behavioural finance and forensic accounting shaped how I judge business quality.',
+			)
+		)
 		. ls_h( 'What you will never find here' )
 		. ls_list(
 			array(
@@ -200,9 +224,9 @@ function ls_demo_pages( $vi_cat ) {
 		'',
 		ls_p( 'One short, practical money lesson every week, matched to your stage of life. Pick the free guide that fits you best and we’ll send the right emails from there.', 'lead' )
 		. '<!-- wp:group {"align":"wide","className":"ls-signup-grid","layout":{"type":"default"}} -->' . "\n<div class=\"wp-block-group alignwide ls-signup-grid\">"
-		. ls_sc( '[ls_signup stage="starting-out" title="Starting Out" text="The First Job Budget Checklist, plus lessons on payslips, tax and your first SIP." button="Get the checklist"]' )
-		. ls_sc( '[ls_signup stage="growing" title="Growing" text="The SIP Step-Up Planner, plus lessons on lifestyle creep and judging a business." button="Get the planner"]' )
-		. ls_sc( '[ls_signup stage="building-wealth" title="Building Wealth" text="The 60/40 Rebalancing Worksheet, plus lessons on allocation and moats." button="Get the worksheet"]' )
+		. ls_sc( '[ls_signup stage="starting-out" title="Starting Out" text="The First Job Budget Checklist, plus lessons on payslips, compounding and automating your first SIP." button="Get the checklist"]' )
+		. ls_sc( '[ls_signup stage="growing" title="Growing" text="The 60/40 Rebalancing Worksheet, plus lessons on asset allocation, FOMO and staying invested." button="Get the worksheet"]' )
+		. ls_sc( '[ls_signup stage="building-wealth" title="Building Wealth" text="The Business Quality Checklist, plus lessons on moats and research process." button="Get the checklist"]' )
 		. "</div>\n<!-- /wp:group -->\n\n"
 		. ls_p( 'No spam and no stock tips. Unsubscribe with one click. You can change your stage from the footer of any email.', 'is-muted' ),
 	);
