@@ -6,7 +6,7 @@ Description: A calm, fast block theme for a personal finance and value investing
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
-Version: 1.0.0
+Version: 1.1.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: stages-finance
@@ -81,7 +81,7 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 .stage-card h2, .stage-card h3 { font-size: 1.75rem; margin: 0; }
 .stage-card p { margin: 0; }
 .stage-card .card-text { color: var(--wp--preset--color--ink-soft); flex-grow: 1; }
-.stage-card .card-who { font-size: 0.8125rem; color: var(--wp--preset--color--muted); }
+.stage-card .card-who { font-size: 0.875rem; font-weight: 600; color: var(--stage); }
 .stage-card .wp-block-buttons { margin-top: 6px; }
 .stage-card .wp-block-button__link { background: var(--stage); min-height: 44px; display: inline-flex; align-items: center; gap: 8px; }
 .stage-card .wp-block-button__link::after { content: ""; position: absolute; inset: 0; border-radius: var(--card-radius); }
@@ -346,3 +346,57 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 .trust-strip .trust-items li:nth-child(3)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239FB3D1' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z'/%3E%3C/svg%3E"); }
 .trust-strip .trust-items { margin: 0 auto !important; }
 .author-avatar { margin: 0 !important; }
+
+
+/* ---------- Article comments ---------- */
+.article-comments { border-top: 1px solid var(--wp--preset--color--line); }
+.article-comments h2 { margin-bottom: 4px; }
+.comments-intro { color: var(--wp--preset--color--ink-soft); font-size: 0.9375rem; }
+.article-comments .wp-block-comments-title { font-size: 1rem; font-family: var(--wp--preset--font-family--body); font-weight: 600; color: var(--wp--preset--color--muted); margin-top: 28px; }
+.article-comments .wp-block-comment-template { list-style: none; padding: 0; margin: 16px 0 0; }
+.article-comments .wp-block-comment-template ol { list-style: none; padding-left: clamp(14px, 4vw, 32px); margin: 0; border-left: 2px solid var(--wp--preset--color--line); }
+.article-comments .wp-block-comment-template li { margin: 0 0 14px; }
+.comment-card { background: var(--wp--preset--color--surface); border-radius: 14px; padding: 16px 18px !important; }
+.comment-card p { margin: 0 0 8px; }
+.comment-card .wp-block-comment-content p:last-child { margin-bottom: 0; }
+.comment-meta-row .wp-block-comment-author-name { font-weight: 600; font-size: 0.9375rem; }
+.comment-meta-row .wp-block-comment-date { font-size: 0.8125rem; color: var(--wp--preset--color--muted); }
+.comment-actions { font-size: 0.875rem; font-weight: 600; }
+.comment-actions a { text-decoration: none; }
+.comment-actions a:hover { text-decoration: underline; }
+.bypostauthor > .comment-card { background: var(--stage-soft); border-left: 3px solid var(--stage); }
+.bypostauthor > .comment-card .wp-block-comment-author-name::after {
+	content: "Author"; margin-left: 8px; padding: 2px 8px; border-radius: 999px;
+	background: var(--stage); color: #fff; font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; vertical-align: middle;
+}
+.comment-awaiting-moderation { font-size: 0.8125rem; color: var(--wp--preset--color--muted); font-style: italic; }
+
+.article-comments .comment-respond { margin-top: 28px; padding: clamp(20px, 3vw, 28px); border: 1px solid var(--wp--preset--color--line); border-radius: 16px; }
+.article-comments .comment-reply-title { font-family: var(--wp--preset--font-family--display); font-size: 1.375rem; margin: 0 0 6px; }
+.article-comments .comment-reply-title small { margin-left: 8px; font-size: 0.875rem; font-family: var(--wp--preset--font-family--body); }
+.article-comments .comment-notes, .article-comments .logged-in-as { font-size: 0.875rem; color: var(--wp--preset--color--muted); margin: 0 0 14px; }
+.article-comments .comment-form p { margin: 0 0 14px; }
+.article-comments .comment-form label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 6px; }
+.article-comments .comment-form input[type="text"],
+.article-comments .comment-form input[type="email"],
+.article-comments .comment-form input[type="url"],
+.article-comments .comment-form textarea {
+	width: 100%; box-sizing: border-box; padding: 12px 14px; min-height: 46px;
+	border: 1px solid #B9C0CC; border-radius: 10px; font: inherit; font-size: 1rem; color: var(--wp--preset--color--ink); background: #fff;
+}
+.article-comments .comment-form textarea { min-height: 140px; resize: vertical; }
+.article-comments .comment-form-url { display: none; }
+.article-comments .comment-form-cookies-consent { display: flex; gap: 8px; align-items: flex-start; }
+.article-comments .comment-form-cookies-consent label { font-weight: 400; margin: 0; }
+.article-comments .comment-form-cookies-consent input { margin-top: 5px; }
+.article-comments .form-submit .submit, .article-comments .wp-block-post-comments-form input[type="submit"] {
+	min-height: 48px; padding: 0 24px; border: 0; border-radius: 999px; cursor: pointer;
+	background: var(--stage, var(--wp--preset--color--ink)); color: #fff; font: inherit; font-weight: 600;
+}
+.article-comments .form-submit .submit:hover { filter: brightness(0.92); }
+@media (min-width: 640px) {
+	.article-comments .comment-form { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+	.article-comments .comment-form > * { grid-column: 1 / -1; }
+	.article-comments .comment-form-author { grid-column: 1; }
+	.article-comments .comment-form-email { grid-column: 2; }
+}

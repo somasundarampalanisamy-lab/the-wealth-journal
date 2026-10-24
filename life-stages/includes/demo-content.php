@@ -79,10 +79,10 @@ function ls_demo_hub_content( $stage, $term_id ) {
 
 	$out  = '<!-- wp:group {"align":"full","className":"hub-hero ' . $h['class'] . '","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"},"blockGap":"16px"}},"layout":{"type":"constrained","contentSize":"880px"}} -->' . "\n";
 	$out .= '<div class="wp-block-group alignfull hub-hero ' . $h['class'] . '" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">';
-	$out .= ls_p( $h['step'], 'eyebrow' );
+	$out .= ls_sc( '[ls_stage_step stage="' . $stage . '"]' );
 	$out .= '<!-- wp:heading {"level":1,"fontSize":"huge"} -->' . "\n" . '<h1 class="wp-block-heading has-huge-font-size">' . $h['title'] . "</h1>\n<!-- /wp:heading -->\n\n";
 	$out .= ls_p( $h['lead'], 'lead' );
-	$out .= ls_p( '<strong>' . $h['who'] . '</strong>' );
+	$out .= ls_sc( '[ls_stage_who stage="' . $stage . '"]' );
 	$out .= "</div>\n<!-- /wp:group -->\n\n";
 
 	$out .= '<!-- wp:group {"align":"full","className":"' . $h['class'] . '","style":{"spacing":{"padding":{"top":"var:preset|spacing|60"},"blockGap":"20px"}},"layout":{"type":"constrained"}} -->' . "\n";
@@ -101,7 +101,7 @@ function ls_demo_hub_content( $stage, $term_id ) {
 	$out .= '<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|60"},"blockGap":"24px"}},"layout":{"type":"constrained"}} -->' . "\n";
 	$out .= '<div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--60)">';
 	$out .= ls_sc( '[ls_signup stage="' . $stage . '" title="' . $h['magnet'][0] . '" text="' . $h['magnet'][1] . '" button="' . $h['magnet'][2] . '"]' );
-	$out .= ls_p( '<a href="{{url:' . $h['next'][0] . '}}">' . $h['next'][1] . '</a>', 'hub-next' );
+	$out .= ls_sc( '[ls_hub_next stage="' . $stage . '"]' );
 	$out .= "</div>\n<!-- /wp:group -->\n\n";
 
 	return $out;
@@ -129,22 +129,15 @@ function ls_demo_pages( $vi_cat ) {
 		'',
 		ls_p( 'This blog is organised by stage of life, so you only see what’s useful right now. Pick the card that sounds most like you. You can switch any time.', 'lead' )
 		. ls_pattern( 'stages-finance/stage-cards' )
-		. ls_h( 'Still not sure? Three quick questions' )
-		. ls_list(
-			array(
-				'<strong>Have you received your first salary yet, or did you get it within the last year?</strong> Start with <a href="{{url:starting-out}}">Starting Out</a>.',
-				'<strong>Have you been working for 1–5 years, with savings that are starting to grow?</strong> Go to <a href="{{url:growing}}">Growing</a>.',
-				'<strong>Do you already have a portfolio worth protecting and want to manage it with discipline?</strong> Head to <a href="{{url:building-wealth}}">Building Wealth</a>.',
-			),
-			true
-		)
+		. ls_h( 'Still not sure? Find your stage' )
+		. ls_sc( '[ls_stage_quiz]' )
 		. ls_h( 'What makes this blog different' )
 		. ls_list(
 			array(
 				'Plain language. Every term is explained with an everyday analogy.',
 				'Principles, not predictions. No stock tips, no “hot” funds, no hype.',
 				'Grounded in value investing, the approach of Benjamin Graham and Warren Buffett, adapted for today.',
-				'Written by someone who has done it: 23 years in IT and 15 years of investing.',
+				'Written by someone who has done it: 24 years in IT and 15 years of investing.',
 			)
 		)
 		. ls_sc( '[ls_signup stage="starting-out" title="Get one practical money lesson a week" text="Free, five minutes to read, and matched to your stage of life." button="Subscribe"]' ),
@@ -185,7 +178,7 @@ function ls_demo_pages( $vi_cat ) {
 		'',
 		ls_p( 'Invest like a business owner, not a gambler. Then go live your life.', 'lead' )
 		. ls_h( 'Who I am' )
-		. ls_p( 'For 23 years, I worked in IT. I sat through the meetings, met the deadlines and lived the life many of you are living now. For 15 of those years, I was also quietly building wealth, not by watching screens or chasing tips, but by owning good businesses at sensible prices and sticking to a simple 60% equity / 40% debt plan. Along the way I watched brilliant colleagues lose their savings, and their sleep, to intraday trading, options and the crypto coin of the month. I started this blog because there is a calmer, proven path, and nobody showed it to them early enough.' )
+		. ls_p( 'For 24 years, I worked in IT. I sat through the meetings, met the deadlines and lived the life many of you are living now. For 15 of those years, I was also quietly building wealth, not by watching screens or chasing tips, but by owning good businesses at sensible prices and sticking to a simple 60% equity / 40% debt plan. Along the way I watched brilliant colleagues lose their savings, and their sleep, to intraday trading, options and the crypto coin of the month. I started this blog because there is a calmer, proven path, and nobody showed it to them early enough.' )
 		. ls_h( 'Why speculation fails busy professionals' )
 		. ls_p( 'Trading promises fast money but usually delivers constant screen-checking, stress that leaks into your workday, and losses. SEBI’s own studies have found that roughly nine out of ten individual F&amp;O traders lose money. That isn’t bad luck. You’re competing against algorithms and full-time institutions while also trying to do your actual job. Speculation asks, “What will the price do next week?” Nobody can answer that reliably, least of all someone checking an app between meetings.' )
 		. ls_h( 'The calmer path' )
@@ -240,6 +233,8 @@ function ls_demo_page( $slug, $title, $content, $template = '', $order = 0 ) {
 			'post_name'    => $slug,
 			'post_content' => $content,
 			'menu_order'   => $order,
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
 		)
 	);
 	if ( $id && ! is_wp_error( $id ) && $template ) {
@@ -358,6 +353,10 @@ function ls_import_demo_content() {
 		$author = $admins ? (int) $admins[0] : 1;
 	}
 
+	/* Comments: recommended discussion settings before any article is created. */
+	ls_apply_comment_defaults();
+	update_option( 'ls_comments_configured', 1 );
+
 	/* Stages. */
 	$stage_ids = array(
 		'starting-out'    => ls_demo_term( 'Starting Out', 'starting-out', 'stage', 0, 'For final-year students and freshers: payslips, first budgets, tax basics and your first investments.' ),
@@ -435,6 +434,8 @@ function ls_import_demo_content() {
 				'post_title'    => $a['title'],
 				'post_name'     => $a['slug'],
 				'post_excerpt'  => $a['excerpt'],
+				'comment_status' => 'open',
+				'ping_status'   => 'closed',
 				'post_content'  => ls_demo_fill_urls( $a['content'] ),
 				'post_author'   => $author,
 				'post_date_gmt' => $date,

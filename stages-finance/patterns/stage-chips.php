@@ -15,6 +15,9 @@ $stages = array(
 <div class="wp-block-buttons stage-chips">
 <?php
 foreach ( $stages as $slug => $label ) :
+	if ( ! stages_finance_stage_on( $slug ) ) {
+		continue;
+	}
 	$link = taxonomy_exists( 'stage' ) ? get_term_link( $slug, 'stage' ) : '';
 	$link = ( $link && ! is_wp_error( $link ) ) ? $link : stages_finance_page_url( $slug );
 	?>

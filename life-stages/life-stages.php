@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Life Stages
  * Description: Adds a "Stage" audience taxonomy (Starting Out, Growing, Building Wealth), learning paths, a "Next step in your stage" box, stage-aware newsletter forms, free calculators and optional sample content. Pairs with the Stages Finance theme.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Author: [Your Name]
@@ -16,21 +16,90 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LS_VERSION', '1.0.0' );
+define( 'LS_VERSION', '1.1.0' );
 define( 'LS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LS_URL', plugin_dir_url( __FILE__ ) );
 
 /**
- * The three stages, in order. Slug => [label, hub page slug, next stage slug].
+ * All stages, in order, whether or not they are switched on.
+ *
+ * - label: the stage name.
+ * - hub:   slug of the stage's hub page.
+ * - who:   the audience title shown on cards ("who is this for").
+ * - about: a longer description of the audience.
+ *
+ * @return array
+ */
+function ls_all_stages() {
+	return array(
+		'starting-out'    => array(
+			'label' => 'Starting Out',
+			'hub'   => 'starting-out',
+			'who'   => 'From campus to first payslip',
+			'about' => 'Final-year students and anyone in their first year of work.',
+		),
+		'growing'         => array(
+			'label' => 'Growing',
+			'hub'   => 'growing',
+			'who'   => 'Settled in, levelling up',
+			'about' => 'One to five years into your career, with savings that are starting to grow.',
+		),
+		'building-wealth' => array(
+			'label' => 'Building Wealth',
+			'hub'   => 'building-wealth',
+			'who'   => 'Established and compounding',
+			'about' => 'Five or more years in, with a portfolio worth protecting.',
+		),
+	);
+}
+
+/**
+ * Slugs of the stages that are switched on (Settings → Life Stages).
+ * Building Wealth is off by default; it is kept for a future premium tier.
+ *
+ * @return string[]
+ */
+function ls_enabled_stage_slugs() {
+	$opts = get_option( 'ls_settings', array() );
+	$on   = isset( $opts['stages'] ) && is_array( $opts['stages'] ) ? $opts['stages'] : array( 'starting-out', 'growing' );
+	return array_values( array_intersect( array_keys( ls_all_stages() ), $on ) );
+}
+
+/**
+ * Whether a stage is switched on.
+ *
+ * @param string $slug Stage slug.
+ * @return bool
+ */
+function ls_stage_enabled( $slug ) {
+	return in_array( $slug, ls_enabled_stage_slugs(), true );
+}
+
+/**
+ * Stages that are switched off.
+ *
+ * @return string[]
+ */
+function ls_disabled_stage_slugs() {
+	return array_values( array_diff( array_keys( ls_all_stages() ), ls_enabled_stage_slugs() ) );
+}
+
+/**
+ * The enabled stages, in order, each with its 1-based position and the next enabled stage.
  *
  * @return array
  */
 function ls_stages() {
-	return array(
-		'starting-out'    => array( 'label' => 'Starting Out', 'hub' => 'starting-out', 'next' => 'growing' ),
-		'growing'         => array( 'label' => 'Growing', 'hub' => 'growing', 'next' => 'building-wealth' ),
-		'building-wealth' => array( 'label' => 'Building Wealth', 'hub' => 'building-wealth', 'next' => '' ),
-	);
+	$all     = ls_all_stages();
+	$enabled = ls_enabled_stage_slugs();
+	$out     = array();
+	foreach ( $enabled as $i => $slug ) {
+		$out[ $slug ]          = $all[ $slug ];
+		$out[ $slug ]['step']  = $i + 1;
+		$out[ $slug ]['total'] = count( $enabled );
+		$out[ $slug ]['next']  = isset( $enabled[ $i + 1 ] ) ? $enabled[ $i + 1 ] : '';
+	}
+	return $out;
 }
 
 /* -------------------------------------------------------------------------
@@ -257,15 +326,15 @@ function ls_next_step( $content ) {
 		return $content . $box;
 	}
 
-	// End of the path: point to the hub, or to the next stage.
+	// End of the path: point to the next enabled stage, or back to this stage's hub.
 	$next_stage = isset( $stages[ $stage ] ) ? $stages[ $stage ]['next'] : '';
 	if ( $next_stage ) {
 		$title = sprintf( 'Ready for more? Move up to %s →', $stages[ $next_stage ]['label'] );
 		$url   = ls_page_url( $stages[ $next_stage ]['hub'] );
 		$hint  = sprintf( 'You’ve finished the %s path.', $label );
 	} else {
-		$title = 'Browse every Building Wealth article →';
-		$url   = ls_page_url( 'building-wealth' );
+		$title = sprintf( 'Browse every %s article →', $label );
+		$url   = ls_page_url( $stage );
 		$hint  = 'You’ve finished the learning path.';
 	}
 	$box  = '<aside class="ls-next stage-' . esc_attr( $stage ) . '">';
@@ -287,7 +356,10 @@ add_filter( 'the_content', 'ls_next_step', 20 );
  * @return string
  */
 function ls_path_shortcode( $atts ) {
-	$atts  = shortcode_atts( array( 'stage' => 'starting-out' ), $atts, 'ls_path' );
+	$atts = shortcode_atts( array( 'stage' => 'starting-out' ), $atts, 'ls_path' );
+	if ( ! ls_stage_enabled( sanitize_key( $atts['stage'] ) ) ) {
+		return '';
+	}
 	$posts = ls_path_posts( sanitize_key( $atts['stage'] ) );
 	if ( empty( $posts ) ) {
 		return '<p>' . esc_html__( 'Articles for this stage are on their way.', 'life-stages' ) . '</p>';
@@ -325,6 +397,9 @@ function ls_signup_shortcode( $atts ) {
 	);
 
 	$stage  = sanitize_key( $atts['stage'] );
+	if ( ! ls_stage_enabled( $stage ) ) {
+		return '';
+	}
 	$opts   = get_option( 'ls_settings', array() );
 	$action = isset( $opts[ 'form_' . str_replace( '-', '_', $stage ) ] ) ? $opts[ 'form_' . str_replace( '-', '_', $stage ) ] : '';
 	$field  = ! empty( $opts['email_field'] ) ? $opts['email_field'] : 'email_address';
@@ -392,6 +467,10 @@ function ls_sanitize_settings( $in ) {
 		$out[ $k ] = isset( $in[ $k ] ) ? esc_url_raw( $in[ $k ] ) : '';
 	}
 	$out['email_field'] = isset( $in['email_field'] ) ? sanitize_key( $in['email_field'] ) : 'email_address';
+	$out['stages']      = isset( $in['stages'] ) && is_array( $in['stages'] ) ? array_values( array_intersect( array_keys( ls_all_stages() ), array_map( 'sanitize_key', $in['stages'] ) ) ) : array();
+	if ( empty( $out['stages'] ) ) {
+		$out['stages'] = array( 'starting-out' ); // At least one stage must stay on.
+	}
 	return $out;
 }
 
@@ -420,6 +499,15 @@ function ls_settings_page() {
 		<form method="post" action="options.php">
 			<?php settings_fields( 'ls_settings_group' ); ?>
 			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row">Stages shown on the site</th>
+					<td><fieldset>
+						<?php foreach ( ls_all_stages() as $slug => $st ) : ?>
+						<label style="display:block;margin-bottom:6px"><input type="checkbox" name="ls_settings[stages][]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( ls_stage_enabled( $slug ) ); ?>> <strong><?php echo esc_html( $st['label'] ); ?></strong> · <?php echo esc_html( $st['who'] ); ?></label>
+						<?php endforeach; ?>
+						<p class="description">A stage that is switched off disappears everywhere: homepage card, menu, footer, its hub page, its articles and its sign-up form. Nothing is deleted, so you can switch it back on at any time (for example, when you launch a premium tier).</p>
+					</fieldset></td>
+				</tr>
 				<?php foreach ( $fields as $k => $label ) : ?>
 				<tr>
 					<th scope="row"><label for="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></label></th>
@@ -450,6 +538,8 @@ function ls_settings_page() {
  * Sample content import (button, admin notice, WP-CLI)
  * ---------------------------------------------------------------------- */
 
+require_once LS_DIR . 'includes/visibility.php';
+require_once LS_DIR . 'includes/comments.php';
 require_once LS_DIR . 'includes/demo-content.php';
 
 /**
@@ -503,6 +593,10 @@ add_action( 'admin_init', 'ls_maybe_dismiss' );
  */
 function ls_activate() {
 	ls_register();
+	if ( ! get_option( 'ls_comments_configured' ) ) {
+		ls_apply_comment_defaults();
+		update_option( 'ls_comments_configured', 1 );
+	}
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'ls_activate' );

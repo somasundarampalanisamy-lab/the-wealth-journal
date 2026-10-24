@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p class="ls-tool-note">Inflation varies year to year. 5–7% is a common planning range for India.</p>
 	</section>
 
-	<section class="ls-tool stage-building-wealth" id="rebalance" data-ls-tool="rebalance" aria-labelledby="ls-reb-h">
+	<section class="ls-tool stage-growing" id="rebalance" data-ls-tool="rebalance" aria-labelledby="ls-reb-h">
 		<h2 id="ls-reb-h">60/40 rebalancing calculator</h2>
 		<p>Enter what you hold today. We’ll show how much to move to get back to your target mix.</p>
 		<div class="ls-tool-grid">

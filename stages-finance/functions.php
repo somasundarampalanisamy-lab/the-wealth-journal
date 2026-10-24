@@ -61,6 +61,16 @@ function stages_finance_category_url( $slug ) {
 }
 
 /**
+ * Whether a life stage is switched on (always true without the Life Stages plugin).
+ *
+ * @param string $slug Stage slug.
+ * @return bool
+ */
+function stages_finance_stage_on( $slug ) {
+	return function_exists( 'ls_stage_enabled' ) ? ls_stage_enabled( $slug ) : true;
+}
+
+/**
  * Pattern category for this theme's sections.
  */
 function stages_finance_pattern_category() {
@@ -104,7 +114,8 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 			'label' => 'Starting Out',
 			'title' => 'Your first salary, sorted.',
 			'text'  => 'Decode your payslip, beat the tax confusion and start investing the right way from day one.',
-			'who'   => 'Final-year students &amp; freshers',
+			'who'   => 'From campus to first payslip',
+			'slug'  => 'starting-out',
 			'cta'   => 'Start my first-job plan',
 			'url'   => stages_finance_page_url( 'starting-out' ),
 		),
@@ -114,7 +125,8 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 			'label' => 'Growing',
 			'title' => 'Earning well. Now make it work.',
 			'text'  => 'Turn a growing salary into growing wealth, with smarter SIPs, your first stock analysis and no lifestyle creep.',
-			'who'   => '1–5 years of work experience',
+			'who'   => 'Settled in, levelling up',
+			'slug'  => 'growing',
 			'cta'   => 'Grow my money',
 			'url'   => stages_finance_page_url( 'growing' ),
 		),
@@ -124,11 +136,28 @@ function stages_finance_stage_cards_markup( $level = 2 ) {
 			'label' => 'Building Wealth',
 			'title' => 'Protect what you’ve built. Compound the rest.',
 			'text'  => 'Asset allocation, rebalancing and value investing for a portfolio that survives every market cycle.',
-			'who'   => '5+ years of work experience',
+			'who'   => 'Established and compounding',
+			'slug'  => 'building-wealth',
 			'cta'   => 'Build my portfolio',
 			'url'   => stages_finance_page_url( 'building-wealth' ),
 		),
 	);
+
+	// With the Life Stages plugin: show only switched-on stages and use its audience titles.
+	if ( function_exists( 'ls_stage_enabled' ) ) {
+		$all   = ls_all_stages();
+		$cards = array_values(
+			array_filter(
+				$cards,
+				function ( $c ) {
+					return ls_stage_enabled( $c['slug'] );
+				}
+			)
+		);
+		foreach ( $cards as $i => $c ) {
+			$cards[ $i ]['who'] = esc_html( $all[ $c['slug'] ]['who'] );
+		}
+	}
 
 	$level = max( 2, min( 4, (int) $level ) );
 	$out   = '<!-- wp:columns {"align":"wide","className":"stage-cards"} --><div class="wp-block-columns alignwide stage-cards">';

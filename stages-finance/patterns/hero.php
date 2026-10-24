@@ -27,7 +27,7 @@
 <!-- wp:group {"tagName":"section","className":"trust-strip","style":{"spacing":{"padding":{"top":"22px","bottom":"22px"}}},"layout":{"type":"constrained"}} -->
 <section class="wp-block-group trust-strip" style="padding-top:22px;padding-bottom:22px">
 	<!-- wp:list {"className":"trust-items"} -->
-	<ul class="wp-block-list trust-items"><!-- wp:list-item --><li>23 years in IT</li><!-- /wp:list-item --><!-- wp:list-item --><li>15 years of value investing</li><!-- /wp:list-item --><!-- wp:list-item --><li>No tips, no hype, just principles</li><!-- /wp:list-item --></ul>
+	<ul class="wp-block-list trust-items"><!-- wp:list-item --><li>24 years in IT</li><!-- /wp:list-item --><!-- wp:list-item --><li>15 years of value investing</li><!-- /wp:list-item --><!-- wp:list-item --><li>No tips, no hype, just principles</li><!-- /wp:list-item --></ul>
 	<!-- /wp:list -->
 </section>
 <!-- /wp:group -->

@@ -25,7 +25,7 @@
 		<div class="wp-block-column">
 			<!-- wp:heading {"level":2} --><h2 class="wp-block-heading">Your stage</h2><!-- /wp:heading -->
 			<!-- wp:list -->
-			<ul class="wp-block-list"><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'starting-out' ) ); ?>">Starting Out</a></li><!-- /wp:list-item --><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'growing' ) ); ?>">Growing</a></li><!-- /wp:list-item --><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'building-wealth' ) ); ?>">Building Wealth</a></li><!-- /wp:list-item --><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'start-here' ) ); ?>">Not sure? Start here</a></li><!-- /wp:list-item --></ul>
+			<ul class="wp-block-list"><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'starting-out' ) ); ?>">Starting Out</a></li><!-- /wp:list-item --><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'growing' ) ); ?>">Growing</a></li><!-- /wp:list-item --><?php if ( stages_finance_stage_on( 'building-wealth' ) ) : ?><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'building-wealth' ) ); ?>">Building Wealth</a></li><!-- /wp:list-item --><?php endif; ?><!-- wp:list-item --><li><a href="<?php echo esc_url( stages_finance_page_url( 'start-here' ) ); ?>">Not sure? Start here</a></li><!-- /wp:list-item --></ul>
 			<!-- /wp:list -->
 		</div>
 		<!-- /wp:column -->

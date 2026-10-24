@@ -1,15 +1,18 @@
 === Life Stages ===
 Requires at least: 6.5
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 
 Audience "stages" for a personal finance blog: Starting Out, Growing, Building Wealth.
+Each stage can be switched on or off in Settings → Life Stages (Building Wealth is off by default).
 
 == What it adds ==
 * Posts → Stages: tick one or more stages on each post (separate from topic categories).
 * "Learning path" box on each post: its position in that stage's "Read these first" list.
 * A "Next step in your stage" card at the end of every article.
+* Moderated comments on articles (WordPress comments, stored in the site database), with a
+  honeypot spam check, no website field, and first-comment approval.
 * Shortcodes:
   [ls_path stage="starting-out"]   ordered learning path
   [ls_signup stage="growing" title="..." text="..." button="..."]   stage-tagged newsletter form
